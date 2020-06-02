@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Hello React</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" />
+
+    <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+
+  </head>
+  <body>
+    <div id="root"></div>
+    
+    <script type="text/babel">
+
+        const App = (props) => {
+
+            const note1 = React.useRef(0);
+            const note2 = React.useRef(0);
+            const note3 = React.useRef(0);
+            const note4 = React.useRef(0);
+            const note5 = React.useRef(0);
+
+            const [moyenne, setMoyenne] = React.useState(0);
+
+            const submitForm = (e) => {
+                e.preventDefault()
+                console.log('useRef', note1.current.value)
+                const somme = (
+                    parseInt(note1.current.value)
+                    +
+                    parseInt(note2.current.value)
+                    +
+                    parseInt(note3.current.value)
+                    +
+                    parseInt(note4.current.value)
+                    +
+                    parseInt(note5.current.value)
+                );
+
+                const moyenne = isNaN(somme/5) ? 0 : (somme/5)
+
+                console.log('result', moyenne)
+
+
+                setMoyenne(moyenne);
+            }
+
+            const reset = () => {
+                note1.current.value = ''
+                note2.current.value = ''
+                note3.current.value = ''
+                note4.current.value = ''
+                note5.current.value = ''
+            }
+            
+            return true &&
+            <div className="container">
+                {moyenne !== 0 && <div className="row">
+                    <div className="col">
+                        Moyenne: <span>{moyenne}</span>
+                    </div>
+                </div>}
+                <div className="row">
+                    <div className="col-4">
+                        <form onSubmit={submitForm}>
+                            <div className="form-group">
+                                <label htmlFor="note1">Note 1</label>
+                                <input type="number" ref={note1} className="form-control" id="note1" />
+                            </div>
+                            <div className="form-group">
+                                <label htmlFor="note2">Note 2</label>
+                                <input type="number" ref={note2} className="form-control" id="note2" />
+                            </div>
+                            <div className="form-group">
+                                <label htmlFor="note3">Note 3</label>
+                                <input type="number" ref={note3} className="form-control" id="note3" />
+                            </div>
+                            <div className="form-group">
+                                <label htmlFor="note4">Note 4</label>
+                                <input type="number" ref={note4} className="form-control" id="note4" />
+                            </div>
+                            <div className="form-group">
+                                <label htmlFor="note5">Note 5</label>
+                                <input type="number" ref={note5} className="form-control" id="note5" />
+                            </div>
+                            <div className="row">
+                                <div className="col">
+                                    <button type="submit" className="btn btn-secondary" onClick={reset}>Reset</button>
+                                </div>
+                                <div className="col text-right">
+                                    <button type="submit" className="btn btn-primary">Calculer</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        }
+
+        ReactDOM.render(
+            <App/>,
+            document.getElementById("root")
+        );
+    </script>
+  </body>
+</html>
