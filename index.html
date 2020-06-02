@@ -21,75 +21,52 @@
 
         const App = (props) => {
 
-            const note1 = React.useRef(0);
-            const note2 = React.useRef(0);
-            const note3 = React.useRef(0);
-            const note4 = React.useRef(0);
-            const note5 = React.useRef(0);
+            const limitElms = 5;
+            const elements = [];
 
+            for (let i = 0; i < limitElms; i++) {
+                const element = elements.push(React.useRef(0));
+            }
+            
             const [moyenne, setMoyenne] = React.useState(0);
 
             const submitForm = (e) => {
                 e.preventDefault()
-                console.log('useRef', note1.current.value)
-                const somme = (
-                    parseInt(note1.current.value)
-                    +
-                    parseInt(note2.current.value)
-                    +
-                    parseInt(note3.current.value)
-                    +
-                    parseInt(note4.current.value)
-                    +
-                    parseInt(note5.current.value)
-                );
+                
+                let somme = 0; 
+                for (let i = 0; i < limitElms; i++) {
+                    const value = elements[i].current.value;
+                    somme += parseInt(value);
+                }
+                console.log('somme = ', somme);
 
-                const moyenne = isNaN(somme/5) ? 0 : (somme/5)
+                if (isNaN(somme)) {
+                    setMoyenne(0);
+                    return 0;
+                }
 
-                console.log('result', moyenne)
-
-
+                const moyenne = somme/limitElms;
+                console.log('moyenne = ', moyenne);
                 setMoyenne(moyenne);
             }
 
             const reset = () => {
-                note1.current.value = ''
-                note2.current.value = ''
-                note3.current.value = ''
-                note4.current.value = ''
-                note5.current.value = ''
+                for (let i = 0; i < limitElms; i++) {
+                    const value = elements[i].current.value = '';
+                }
             }
             
             return true &&
             <div className="container">
-                {moyenne !== 0 && <div className="row">
-                    <div className="col">
-                        Moyenne: <span>{moyenne}</span>
-                    </div>
-                </div>}
                 <div className="row">
                     <div className="col-4">
                         <form onSubmit={submitForm}>
-                            <div className="form-group">
-                                <label htmlFor="note1">Note 1</label>
-                                <input type="number" ref={note1} className="form-control" id="note1" />
-                            </div>
-                            <div className="form-group">
-                                <label htmlFor="note2">Note 2</label>
-                                <input type="number" ref={note2} className="form-control" id="note2" />
-                            </div>
-                            <div className="form-group">
-                                <label htmlFor="note3">Note 3</label>
-                                <input type="number" ref={note3} className="form-control" id="note3" />
-                            </div>
-                            <div className="form-group">
-                                <label htmlFor="note4">Note 4</label>
-                                <input type="number" ref={note4} className="form-control" id="note4" />
-                            </div>
-                            <div className="form-group">
-                                <label htmlFor="note5">Note 5</label>
-                                <input type="number" ref={note5} className="form-control" id="note5" />
-                            </div>
+                           { elements.map((elm, i) => (
+                                <div className="form-group" key={i}>
+                                    <label htmlFor={'note'+(i+1)}>Note {i+1}</label>
+                                    <input type="number" ref={elm} className="form-control" id={'note'+(i+1)} />
+                                </div>
+                            ))}
                             <div className="row">
                                 <div className="col">
                                     <button type="submit" className="btn btn-secondary" onClick={reset}>Reset</button>
@@ -101,6 +78,11 @@
                         </form>
                     </div>
                 </div>
+                {moyenne !== 0 && <div className="row">
+                    <div className="col">
+                        Moyenne: <span>{moyenne}</span>
+                    </div>
+                </div>}
             </div>
         }
 
